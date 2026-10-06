@@ -1,0 +1,91 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update README
+        env:
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from datetime import datetime
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GH_TOKEN"]
+
+          url = f"https://api.github.com/repos/{repo}/commits?per_page=5"
+
+          request = urllib.request.Request(
+              url,
+              headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {token}"
+              }
+          )
+
+          with urllib.request.urlopen(request) as response:
+              commits = json.load(response)
+
+          lines = [
+              "## Recent Activity",
+              ""
+          ]
+
+          for commit in commits:
+              message = commit["commit"]["message"].split("\n")[0]
+              date = commit["commit"]["author"]["date"][:10]
+              lines.append(f"- {date} — {message}")
+
+          lines.extend([
+              "",
+              "<!-- ACTIVITY:END -->"
+          ])
+
+          with open("README.md", "r", encoding="utf-8") as f:
+              readme = f.read()
+
+          start_marker = "<!-- ACTIVITY:START -->"
+          end_marker = "<!-- ACTIVITY:END -->"
+
+          start = readme.index(start_marker) + len(start_marker)
+
+          new_readme = (
+              readme[:start]
+              + "\n\n"
+              + "\n".join(lines)
+          )
+
+          with open("README.md", "w", encoding="utf-8") as f:
+              f.write(new_readme)
+          PY
+
+      - name: Commit README changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if git diff --cached --quiet; then
+            echo "No README changes."
+          else
+            git commit -m "docs: update README activity"
+            git push
+          fi
