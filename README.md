@@ -2,6 +2,10 @@
 
 This project demonstrates how GitHub Actions can automatically update a README with recent repository activity.
 
+## E Demo
+
+This section was added to demonstrate automatic issue closure.
+
 ## Automated Activity
 
 <!-- ACTIVITY:START -->
