@@ -1,0 +1,35 @@
+name: Validate README
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check README markers
+        run: |
+          START_MARKER='<!-- AUTO-UPDATE:START -->'
+          END_MARKER='<!-- AUTO-UPDATE:END -->'
+
+          if ! grep -q "$START_MARKER" README.md; then
+            echo "ERROR: Start marker is missing."
+            exit 1
+          fi
+
+          if ! grep -q "$END_MARKER" README.md; then
+            echo "ERROR: End marker is missing."
+            exit 1
+          fi
+
+          echo "README markers are valid."
