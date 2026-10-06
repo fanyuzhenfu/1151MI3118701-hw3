@@ -6,6 +6,10 @@ This project demonstrates how GitHub Actions can automatically update a README w
 
 <!-- ACTIVITY:START -->
 
-No activity has been recorded yet.
+## Recent Activity
+
+- 2026-10-06 — Create update-readme.yml
+- 2026-10-06 — Update README.md
+- 2026-10-06 — Initial commit
 
 <!-- ACTIVITY:END -->
