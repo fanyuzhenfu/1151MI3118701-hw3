@@ -12,10 +12,10 @@ This section was added to demonstrate automatic issue closure.
 
 ## Recent Activity
 
+- 2026-10-06 — Create validate-readme.yml
+- 2026-10-06 — docs: update README activity
 - 2026-10-06 — Merge pull request #2 from fanyuzhenfu/feature/auto-readme-update
 - 2026-10-06 — docs: prepare issue closure demo
 - 2026-10-06 — docs: update README activity
-- 2026-10-06 — Create update-readme.yml
-- 2026-10-06 — Update README.md
 
 <!-- ACTIVITY:END -->
